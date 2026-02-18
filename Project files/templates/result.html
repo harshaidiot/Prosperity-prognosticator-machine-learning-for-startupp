@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .result-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .result-box h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        .result-value {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+        
+        .result-box.acquired {
+            background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+        }
+        
+        .result-box.closed {
+            background: linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-home {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .btn-home:hover {
+            background-color: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-predict {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-predict:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        .description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result</h1>
+        
+        <div class="result-box" id="resultBox">
+            <h2>Predicted Outcome:</h2>
+            <div class="result-value" id="resultValue">Loading...</div>
+        </div>
+        
+        <p class="description" id="resultDescription"></p>
+        
+        <div class="button-group">
+            <button class="btn-home" onclick="goHome()">New Prediction</button>
+        </div>
+    </div>
+    
+    <script>
+        // Get result from URL parameters or session storage
+        function getResultFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('result');
+        }
+        
+        function displayResult(result) {
+            const resultBox = document.getElementById('resultBox');
+            const resultValue = document.getElementById('resultValue');
+            const resultDescription = document.getElementById('resultDescription');
+            
+            resultValue.textContent = result;
+            
+            if (result === 'Acquired') {
+                resultBox.classList.add('acquired');
+                resultDescription.textContent = 'Based on the startup parameters provided, the model predicts that this startup will likely be ACQUIRED by another company.';
+            } else if (result === 'Closed') {
+                resultBox.classList.add('closed');
+                resultDescription.textContent = 'Based on the startup parameters provided, the model predicts that this startup will likely be CLOSED.';
+            }
+        }
+        
+        function goHome() {
+            window.location.href = '/';
+        }
+        
+        // Load result when page loads
+        window.addEventListener('load', function() {
+            const result = getResultFromURL();
+            if (result) {
+                displayResult(result);
+            }
+        });
+    </script>
+</body>
+</html>
